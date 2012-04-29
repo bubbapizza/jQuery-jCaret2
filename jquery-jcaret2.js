@@ -1,19 +1,23 @@
 (function($) {
 
   var methods = {
-    init : function( options ) { 
+    init : function(arg1, arg2) { 
     }, // endfunction
 
-    show : function( ) {
+    start : function( ) {
     }, // endfunction
 
-    hide : function( ) { 
+    end : function( ) { 
     }, // endfunction
 
-    update : function(content) { 
+    text : function(content) { 
+    } // endfunction
+
+    find : function(content) { 
     } // endfunction
 
   }; // endobject
+
 
   $.fn.caret = function(method) {
     
@@ -24,6 +28,7 @@
             this, Array.prototype.slice.call(arguments, 1) 
          );
 
+    /* If no parameters are passed, just call the init routine. */
     } else if (typeof(method) === 'object' || !method) {
       return methods.init.apply(this, arguments);
 
