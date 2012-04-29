@@ -1,12 +1,33 @@
+/****************
+       Copyright (C) 2012 Shawn Wilson <shawn@ch2a.ca>
+       
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+****************/
+
+
 (function($) {
 
    var node = this,
        domNode = node[0];
 
 
+   /******  PRIVATE FUNCTIONS ******/
+
    /* 
-    *  We need some utility functions to figure out the start and end
-    *  selection text no matter what the browser is.
+    *  This is a utility function to find out the currently selected
+    *  text is no matter what the browser is.  It returns an array
+    *  of the format [start, end].
     */
    var getSelectRange = function() {
 
@@ -50,28 +71,56 @@
 
       /* If we got here, something went wrong. */
       return null;
-
    } // endfunction
 
-         
 
-      
+   /* 
+    *  This is a utility function to set the selected text no 
+    *  matter what the browser is.  It takes as arguments the start
+    *  and end positions of the text to select.
+    */
+   var setSelectRange = function(start, end) {
 
+      /* Internet explorer is retarded so we have to use a different
+         method do highlight the text. */
+      if ($.browser.msie) {
+         var selRange = domNode.createTextRange();
+         selRange.collapse(true);
+         selRange.moveStart('character', start);
+         selRange.moveEnd('character', end - start);
+         selRange.select();
+
+      /* Normal browsers, setting highlighted text range is easy. */
+      } else {
+         domNode.selectionStart = start;
+         domNode.selectionEnd = end;
+      } // endif
+
+      domNode.focus();
+      return node;
+   } // endfunction
          
       
    
+   /****** PUBLIC METHODS ******/
+
    var methods = {
  
-      /*******
+      /********
        * INIT
-       *******/
+       ********/
       init : function(arg1, arg2) { 
-         var start = null,
-             end = null;
+         var start, end;
    
+         /* If we got no arguments, then return the current range. */
+         if (!arg1) {
+            return getSelectRange();
+         } // endif
+
+
          /*  
-          *  Figure out the start and end positions of the highlighted 
-          *  text.
+          *  We got some arguments, so see what they are and set the
+          *  the starting and ending selection range accordingly.
           */
    
          /* ARRAY OR DICTIONARY */
@@ -105,29 +154,97 @@
                end = start;
             } // endif
 
+
+         /* BAD ARGS */
+         } else {
+            return null;
          } // endif
 
 
-         /* If we got no arguments, then return the current range. */
+         /* We made it this far so select the text. */
+         return setSelectRange(start, end);
+      }, // endfunction
 
-      }, // endfunction
   
-  
+      /********
+       * START
+       ********/
       start : function( ) {
+         return getSelectRange()[0]
       }, // endfunction
+
   
+      /********
+       * END
+       ********/
       end : function( ) { 
+         return getSelectRange()[1]
       }, // endfunction
-  
-      text : function(content) { 
+
+
+      /********
+       * TEXT
+       ********/
+      text : function(replaceText) { 
+         var val = domNode.value;
+         var range = getSelectRange();
+
+         /* If we got no arguments, return the highlighted text. */
+         if (!replaceText) {
+            return domNode.value.substr(range[0], range[1]);
+         } // endif
+
+
+         /*
+          *  We must have got an argument so that means we need to
+          *  replace the selected text with the given string.
+          */
+         domNode.value = val.substr(0, range[0]) + replaceText +
+                         val.substr(range[1] + 1);
+         return node;
       } // endfunction
   
-      find : function(content) { 
+
+      /********
+       * FIND
+       ********/
+      find : function(arg1) { 
+         var start = 0, 
+             end = 0;
+         var strObjType = Object.prototype.toString.call(arg1);
+
+         /* STRING */
+         if (typeof(arg1) === "string") {
+            /* Search for the string.  If we find it, figure out the
+               start and end points so we can highlight it. */
+            var strIndex = domNode.value.indexOf(options);
+            if (strIndex >= 0) {
+               start = strIndex;
+               end = strIndex + arg1.length;
+            } // endif
+
+
+         /* REGULAR EXPRESSION */
+         } else if (strObjType === "[object RegExp]") {
+            /* Evaluate the regular expression.  Figure out the start
+               and end points so we can highlight it. */
+            var re = options.exec(domNode.value);
+            if(re != null) {
+               start = re.index;
+               end = start + re[0].length;
+            } // endif
+         } // endif
+
+         /* We made it this far so select the text. */
+         return setSelectRange(start, end);
       } // endfunction
  
    }; // endobject
  
- 
+
+
+   /***** PLUGIN SCAFFOLD *****/
+
    $.fn.caret = function(method) {
      
       /* Figure out which method to call and pass the appropriate
