@@ -1,0 +1,41 @@
+This is a jquery plugin for getting and selecting text in form fields 
+and/or setting/getting the current cursor (caret) position in a field.
+
+It does basically the same thing as the jcaret plugin by C.F. Wong but
+I wanted to get some practice writing a jQuery plugin from scratch.
+The plugin adheres to the standard jquery plugin format as per the
+jQuery documentation.
+
+Here's a list of all the ways that you can call the plugin:
+
+$(blah).caret()
+   Returns an array w/ 2 elements which indicate the start and end
+   positions of the currently highlighted text.
+
+$(blah).caret( [startPos, endPos] )
+$(blah).caret( startPos, endPos )
+$(blah).caret( {start: startPos, end: endPos} )
+   Highlights the text between startPos and endPos.
+
+$(blah).caret( 'text' )
+   Returns the currently highlighted text
+
+$(blah).caret( 'text', str ) 
+   Replaces the currently highlighted text with 'str'.
+
+$(blah).caret( 'find', findVal )
+   Highlights text by searching for a string or evaluating a regular
+   expression.  findVal can be either a string or a javascript regexp.
+
+
+These methods are strictly for positioning the caret w/ no selection:
+   
+$(blah).caret( pos )
+   Sets the caret to position pos. 
+
+$(blah).caret( 'start' )
+   Positions the caret to the beginning of the text.
+
+$(blah).caret( 'end' )
+   Positions the caret to the end of the text. 
+
