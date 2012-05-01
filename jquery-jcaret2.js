@@ -164,7 +164,7 @@
 
 
          /* We made it this far so select the text. */
-         return setSelectRange(start, end);
+         return setSelectRange.apply(node, [start, end]);
       }, // endfunction
 
   
@@ -172,7 +172,7 @@
        * START
        ********/
       start : function() {
-         return getSelectRange()[0];
+         return getSelectRange.apply(this)[0];
       }, // endfunction
 
   
@@ -180,7 +180,7 @@
        * END
        ********/
       end : function() { 
-         return getSelectRange()[1];
+         return getSelectRange.apply(this)[1];
       }, // endfunction
 
 
@@ -188,12 +188,14 @@
        * TEXT
        ********/
       text : function(replaceText) { 
-         var val = domNode.value;
-         var range = getSelectRange();
+         var node = this,
+             domNode = node[0],
+             val = domNode.value,
+             range = getSelectRange.apply(node);
 
          /* If we got no arguments, return the highlighted text. */
          if (!replaceText) {
-            return domNode.value.substr(range[0], range[1]);
+            return val.slice(range[0], range[1]);
          } // endif
 
 
@@ -203,7 +205,7 @@
           */
          domNode.value = val.substr(0, range[0]) + replaceText +
                          val.substr(range[1] + 1);
-         return this;
+         return node;
       }, // endfunction
   
 
@@ -252,14 +254,15 @@
       /* Figure out which method to call and pass the appropriate
          parameters. */
       if (methods[method]) {
-         console.log("method=", method);
          return methods[method].apply( 
                this, Array.prototype.slice.call(arguments, 1) 
             );
       } // endif 
 
       /* If no parameters are passed, just call the init routine. */
-      if (typeof(method) === 'object' || !method) {
+      if (typeof(method) === 'object' || 
+          typeof(method) === 'number' ||
+          !method) {
          return methods.init.apply(this, arguments);
       } // endif
 

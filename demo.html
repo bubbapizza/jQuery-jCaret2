@@ -9,29 +9,58 @@
       
       $("document").ready(function() {
    
-         /* Small routine to update the start/end values. */
-         var showStartEnd = function() {
-            var range = $(this).caret();
+            /**** helper functions ****/
+
+            /* Small routine to display the start/end values. */
+            var showStartEnd = function() {
+               var range = $(this).caret();
+               
+               /* Show the start & end values. */
+               $("span.caretStart").text(range[0]);
+               $("span.caretEnd").text(range[1]);
+            } // endfunction
+        
+
+            /* Small routine to display selected text. */
+            var showText = function() {
+               var str = $(this).caret('text');
+               str = (str == '') ? "None" : str;
+
+               /* Show the selected text. */
+               $("span.getText").text(str);
+            } // endfunction
+
+      
+            /**** jQuery events ****/
+
+            /* The first field dynamically shows the start/end values. */
+            $("#f1").keyup(showStartEnd).mousemove(showStartEnd);
+
+            /* The 2nd field will highlight mundo. */
+            $("#highlight").click(function () {
+                     $("#f2").val(";Hola, mundo!").caret(7, 12);
+                  } // endfunction
+               ); 
             
-            /* Show the start & end values. */
-            $("span.caretStart").text(range[0]);
-            $("span.caretEnd").text(range[1]);
-         } // endfunction
-     
-   
-         /* Set which events cause a redraw of the start/end values. */
-         $("#f1")
-            .keyup(showStartEnd)
-            .mousemove(showStartEnd);
+            /* The 3rd field will highlight mundo. */
+            $("#f3").keyup(showText).mousemove(showText).click(showText);
+            
          } // endfunction
       );
    </script>
 </head>
 
 <body>
-   <input type="text" id="f1" class="sensor" size="30" /><br/>
-   <input type="text" id="f2" class="sensor" size="30" /><br/>
+   <input type="text" id="f1" size="30"/><br/>
    Caret Position: start=<span class="caretStart"></span>, 
-                   end=<span class="caretEnd"></span>
+                   end=<span class="caretEnd"></span><br/><br/>
+
+   <input type="text" id="f2" size="30"/>
+      <input type="button" id="highlight" value="Highlight mundo"/>
+      <br/><br/>
+
+   <input type="text" id="f3" size="30"/><br/>
+   Selected text = <span class="getText"></span><br/><br/>
+
 </body>
 </html>
