@@ -18,10 +18,6 @@
 
 (function($) {
 
-   var node = this,
-       domNode = node[0];
-
-
    /******  PRIVATE FUNCTIONS ******/
 
    /* 
@@ -31,8 +27,11 @@
     */
    var getSelectRange = function() {
 
-      var selectStart, selectEnd, r1, r2;
+      var node = this,
+          domNode = node[0],
+          selectStart, selectEnd, r1, r2;
 
+      /* This is what actually figures out the selection positions. */
       selectStart = domNode.selectionStart;
       selectEnd = domNode.selectionEnd;
 
@@ -40,10 +39,8 @@
        *  If we're on a browser that supports the selectionStart method,
        *  then just return an array w/ the start & end values.
        */
-      if (selectStart) {
-         if (typeof(selectStart) === "number") {
-            return [selectStart, selectEnd];
-         } // endif
+      if (typeof(selectStart) === "number") {
+         return [selectStart, selectEnd];
       
       /* 
        *  Our browser doesn't support selectionStart so maybe we can 
@@ -81,6 +78,9 @@
     */
    var setSelectRange = function(start, end) {
 
+      var node = this,
+          domNode = node[0];
+
       /* Internet explorer is retarded so we have to use a different
          method do highlight the text. */
       if ($.browser.msie) {
@@ -110,11 +110,13 @@
        * INIT
        ********/
       init : function(arg1, arg2) { 
-         var start, end;
+         var node = this,
+             domNode = node[0],
+             start, end;
    
          /* If we got no arguments, then return the current range. */
          if (!arg1) {
-            return getSelectRange();
+            return getSelectRange.apply(node);
          } // endif
 
 
@@ -201,7 +203,7 @@
           */
          domNode.value = val.substr(0, range[0]) + replaceText +
                          val.substr(range[1] + 1);
-         return node;
+         return this;
       }, // endfunction
   
 
@@ -246,10 +248,11 @@
    /***** PLUGIN SCAFFOLD *****/
 
    $.fn.caret = function(method) {
-     
+
       /* Figure out which method to call and pass the appropriate
          parameters. */
       if (methods[method]) {
+         console.log("method=", method);
          return methods[method].apply( 
                this, Array.prototype.slice.call(arguments, 1) 
             );
