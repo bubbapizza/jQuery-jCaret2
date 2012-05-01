@@ -9,32 +9,29 @@
       
       $("document").ready(function() {
    
-            /**** helper functions ****/
+            /**** FIELD 1 ****
+
+            /*
+             *  Dynamically show the start/end values. 
+             */
 
             /* Small routine to display the start/end values. */
             var showStartEnd = function() {
                var range = $(this).caret();
                
-               /* Show the start & end values. */
                $("span.caretStart").text(range[0]);
                $("span.caretEnd").text(range[1]);
             } // endfunction
         
-
-            /* Small routine to display selected text. */
-            var showText = function() {
-               var str = $(this).caret('text');
-               str = (str == '') ? "None" : str;
-
-               /* Show the selected text. */
-               $("span.getText").text(str);
-            } // endfunction
-
-      
-            /**** jQuery events ****/
-
-            /* The first field dynamically shows the start/end values. */
+            /* Bind the function to key and mouse events. */
             $("#f1").keyup(showStartEnd).mousemove(showStartEnd);
+
+
+            /**** FIELD 2 ****/
+
+            /*
+             *  Display some text pre-highlighted.
+             */
 
             /* The 2nd field will highlight mundo. */
             $("#highlight").click(function () {
@@ -42,7 +39,22 @@
                   } // endfunction
                ); 
             
-            /* The 3rd field will highlight mundo. */
+          
+            /**** FIELD 3 ****/
+
+            /*
+             *  Dynamically show the selected text.
+             */
+
+            /* Small routine to display selected text. */
+            var showText = function() {
+               var str = $(this).caret('text');
+               str = (str == '') ? "None" : str;
+
+               $("span.getText").text(str);
+            } // endfunction
+
+            /* Bind the function to key and mouse events. */
             $("#f3").keyup(showText).mousemove(showText).click(showText);
             
          } // endfunction
