@@ -41,7 +41,7 @@
        *  then just return an array w/ the start & end values.
        */
       if (selectStart) {
-         if (typeof(selectStart) == "number") {
+         if (typeof(selectStart) === "number") {
             return [selectStart, selectEnd];
          } // endif
       
@@ -57,7 +57,7 @@
          /* Figure out the selection start position. */
          r1.moveEnd("character", domNode.value.length);
          selectStart = domNode.value.lastIndexOf(r1.text);
-         if(r1.text == ""){
+         if(r1.text === ""){
             selectStart = domNode.value.length;
          } // endif
 
@@ -65,13 +65,13 @@
          r2.moveStart( "character", (-1 * domNode.value.length));
          selectEnd = r2.text.length;
 
-         return [selectStart, selectEnd]
+         return [selectStart, selectEnd];
       } // endif
 
 
       /* If we got here, something went wrong. */
       return null;
-   } // endfunction
+   }; // endfunction
 
 
    /* 
@@ -98,7 +98,7 @@
 
       domNode.focus();
       return node;
-   } // endfunction
+   }; // endfunction
          
       
    
@@ -169,16 +169,16 @@
       /********
        * START
        ********/
-      start : function( ) {
-         return getSelectRange()[0]
+      start : function() {
+         return getSelectRange()[0];
       }, // endfunction
 
   
       /********
        * END
        ********/
-      end : function( ) { 
-         return getSelectRange()[1]
+      end : function() { 
+         return getSelectRange()[1];
       }, // endfunction
 
 
@@ -202,7 +202,7 @@
          domNode.value = val.substr(0, range[0]) + replaceText +
                          val.substr(range[1] + 1);
          return node;
-      } // endfunction
+      }, // endfunction
   
 
       /********
@@ -210,14 +210,14 @@
        ********/
       find : function(arg1) { 
          var start = 0, 
-             end = 0;
-         var strObjType = Object.prototype.toString.call(arg1);
+             end = 0,
+             strObjType = Object.prototype.toString.call(arg1);
 
          /* STRING */
          if (typeof(arg1) === "string") {
             /* Search for the string.  If we find it, figure out the
                start and end points so we can highlight it. */
-            var strIndex = domNode.value.indexOf(options);
+            var strIndex = domNode.value.indexOf(arg1);
             if (strIndex >= 0) {
                start = strIndex;
                end = strIndex + arg1.length;
@@ -228,8 +228,8 @@
          } else if (strObjType === "[object RegExp]") {
             /* Evaluate the regular expression.  Figure out the start
                and end points so we can highlight it. */
-            var re = options.exec(domNode.value);
-            if(re != null) {
+            var re = arg1.exec(domNode.value);
+            if(re !== null) {
                start = re.index;
                end = start + re[0].length;
             } // endif
@@ -250,17 +250,17 @@
       /* Figure out which method to call and pass the appropriate
          parameters. */
       if (methods[method]) {
-         return methods[ method ].apply( 
+         return methods[method].apply( 
                this, Array.prototype.slice.call(arguments, 1) 
             );
-  
+      } // endif 
+
       /* If no parameters are passed, just call the init routine. */
-      } else if (typeof(method) === 'object' || !method) {
+      if (typeof(method) === 'object' || !method) {
          return methods.init.apply(this, arguments);
-  
-      } else {
-         $.error('Method ' + method + ' does not exist on jQuery.caret');
-      } // endif    
+      } // endif
+
+      $.error('Method ' + method + ' does not exist on jQuery.caret');
    
    }; // endfunction
 
