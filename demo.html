@@ -64,9 +64,26 @@
              *  Replace some highlighted text.
              */
 
-            /* The 2nd field will highlight mundo. */
+            /* The 4th field will replace highlighted text with MUNDO. */
             $("#replace").click(function () {
                      $("#f4").caret('text', "MUNDO!!!")
+                  } // endfunction
+               ); 
+
+
+            /**** FIELD 5 ****/
+
+            /*
+             *  Find and highlight some text.
+             */
+
+            /* The 5th field will high mundo or a quotation. */
+            $("#findmundo").click(function () {
+                     $("#f5").caret('find', "mundo")
+                  } // endfunction
+               ); 
+            $("#findquote").click(function () {
+                     $("#f5").caret('find', /".*"/)
                   } // endfunction
                ); 
           
@@ -89,7 +106,13 @@
    Selected text = <span class="getText"></span><br/><br/>
 
    <input type="text" id="f4" size="30"/>
-      <input type="button" id="replace" value="Replace Text"/>
+      <input type="button" id="replace" value="Insert/Replace Text"/>
+      <br/><br/>
+
+   <input type="text" id="f5" size="30" 
+          value='holy mundo "thats crazy" man'/>
+      <input type="button" id="findmundo" value="Highlight mundo"/>
+      <input type="button" id="findquote" value="Highlight quotation"/>
       <br/><br/>
 
 </body>

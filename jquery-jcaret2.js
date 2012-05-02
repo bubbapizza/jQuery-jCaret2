@@ -209,6 +209,7 @@
           */
          domNode.value = val.substr(0, range[0]) + replaceText +
                          val.substr(range[1] + 1);
+         domNode.focus();
          return node;
       }, // endfunction
   
@@ -217,9 +218,12 @@
        * FIND
        ********/
       find : function(arg1) { 
-         var start = 0, 
+         var node = this,
+             domNode = node[0],
+             start = 0, 
              end = 0,
-             strObjType = Object.prototype.toString.call(arg1);
+             strObjType = Object.prototype.toString.call(arg1); 
+
 
          /* STRING */
          if (typeof(arg1) === "string") {
@@ -243,8 +247,16 @@
             } // endif
          } // endif
 
+
+         /* If there's no range to select then refocus the field and 
+            we're done. */
+         if (start == end) {
+            domNode.focus();
+            return node;
+         } // endif
+
          /* We made it this far so select the text. */
-         return setSelectRange(start, end);
+         return setSelectRange.apply(node, [start, end]);
       } // endfunction
  
    }; // endobject
