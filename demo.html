@@ -65,10 +65,8 @@
              */
 
             /* The 4th field will replace highlighted text with MUNDO. */
-            $("#replace").click(function () {
-                     $("#f4").caret('text', "MUNDO!!!")
-                  } // endfunction
-               ); 
+            $("#replace")
+               .click(function () { $("#f4").caret('text', "MUNDO!!!") }); 
 
 
             /**** FIELD 5 ****/
@@ -78,14 +76,10 @@
              */
 
             /* The 5th field will high mundo or a quotation. */
-            $("#findmundo").click(function () {
-                     $("#f5").caret('find', "mundo")
-                  } // endfunction
-               ); 
-            $("#findquote").click(function () {
-                     $("#f5").caret('find', /".*"/)
-                  } // endfunction
-               ); 
+            $("#findmundo")
+               .click(function () { $("#f5").caret('find', "mundo") }); 
+            $("#findquote")
+               .click(function () { $("#f5").caret('find', /".*"/) }); 
 
 
             /**** FIELD 6 ****/
@@ -94,19 +88,10 @@
              *  Position the caret without highlighting.
              */
 
-            /* The 5th field will high mundo or a quotation. */
-            $("#startpos").click(function () {
-                     $("#f6").caret('start')
-                  } // endfunction
-               ); 
-            $("#endpos").click(function () {
-                     $("#f6").caret('end')
-                  } // endfunction
-               ); 
-            $("#pos5").click(function () {
-                     $("#f6").caret(5)
-                  } // endfunction
-               ); 
+            /* The 6th field will show cursor positioning. */
+            $("#startpos").click(function () { $("#f6").caret('start') }); 
+            $("#endpos").click(function () { $("#f6").caret('end') }); 
+            $("#pos5").click(function () { $("#f6").caret(5) }); 
             
          } // endfunction
       );
