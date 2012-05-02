@@ -86,7 +86,27 @@
                      $("#f5").caret('find', /".*"/)
                   } // endfunction
                ); 
-          
+
+
+            /**** FIELD 6 ****/
+
+            /*
+             *  Position the caret without highlighting.
+             */
+
+            /* The 5th field will high mundo or a quotation. */
+            $("#startpos").click(function () {
+                     $("#f6").caret('start')
+                  } // endfunction
+               ); 
+            $("#endpos").click(function () {
+                     $("#f6").caret('end')
+                  } // endfunction
+               ); 
+            $("#pos5").click(function () {
+                     $("#f6").caret(5)
+                  } // endfunction
+               ); 
             
          } // endfunction
       );
@@ -113,6 +133,13 @@
           value='holy mundo "thats crazy" man'/>
       <input type="button" id="findmundo" value="Highlight mundo"/>
       <input type="button" id="findquote" value="Highlight quotation"/>
+      <br/><br/>
+
+   <input type="text" id="f6" size="30" 
+          value='here is some text'/>
+      <input type="button" id="startpos" value="First"/>
+      <input type="button" id="endpos" value="Last"/>
+      <input type="button" id="pos5" value="6th character"/>
       <br/><br/>
 
 </body>

@@ -171,8 +171,10 @@
       /********
        * START
        ********/
-      start : function() {
-         return setSelectRange.apply(this, [0, 0]);
+      start : function(arg1) {
+         var node = this;
+
+         return setSelectRange.apply(node, [0, 0]);
       }, // endfunction
 
   
@@ -182,9 +184,9 @@
       end : function() { 
          var node = this,
              domNode = node[0],
-             val = domNode.value;
+             lastpos = domNode.value.length;
 
-         return getSelectRange.apply(this, [val.length, val.length]);
+         return setSelectRange.apply(node, [lastpos, lastpos]);
       }, // endfunction
 
 
