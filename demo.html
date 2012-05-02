@@ -56,6 +56,20 @@
 
             /* Bind the function to key and mouse events. */
             $("#f3").keyup(showText).mousemove(showText).click(showText);
+
+
+            /**** FIELD 4 ****/
+
+            /*
+             *  Replace some highlighted text.
+             */
+
+            /* The 2nd field will highlight mundo. */
+            $("#replace").click(function () {
+                     $("#f4").caret('text', "MUNDO!!!")
+                  } // endfunction
+               ); 
+          
             
          } // endfunction
       );
@@ -73,6 +87,10 @@
 
    <input type="text" id="f3" size="30"/><br/>
    Selected text = <span class="getText"></span><br/><br/>
+
+   <input type="text" id="f4" size="30"/>
+      <input type="button" id="replace" value="Replace Text"/>
+      <br/><br/>
 
 </body>
 </html>

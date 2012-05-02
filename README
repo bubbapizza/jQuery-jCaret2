@@ -39,3 +39,13 @@ $(blah).caret( 'start' )
 $(blah).caret( 'end' )
    Positions the caret to the end of the text. 
 
+$(blah).caret( 'start', findVal )
+   Similar to the 'find' method for highlighting text except it
+   doesn't highlight the text.  It just positions the caret to the
+   start of the found text.
+
+$(blah).caret( 'end', findVal )
+   Similar to the 'find' method for highlighting text except it
+   doesn't highlight the text.  It just positions the caret to the
+   end of the found text.
+
