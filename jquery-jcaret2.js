@@ -18,18 +18,51 @@
 
 (function($) {
 
-   /******  PRIVATE FUNCTIONS ******/
+   /******  PRIVATE ******/
+
+   /* 
+    *  This is a utility function to find the start and end positions
+    *  of a substring or regular expression within a given string.
+    */
+   var findRange = function(str, arg1) {
+      var start = 0, 
+          end = 0,
+          strObjType = Object.prototype.toString.call(arg1); 
+
+      /* STRING */
+      if (typeof(arg1) === "string") {
+         /* Search for the string.  If we find it, figure out the
+            start and end points so we can highlight it. */
+         var strIndex = str.indexOf(arg1);
+         if (strIndex >= 0) {
+            start = strIndex;
+            end = strIndex + arg1.length;
+         } // endif
+
+
+      /* REGULAR EXPRESSION */
+      } else if (strObjType === "[object RegExp]") {
+         /* Evaluate the regular expression.  Figure out the start
+            and end points. */
+         var re = arg1.exec(str);
+         if(re !== null) {
+            start = re.index;
+            end = start + re[0].length;
+         } // endif
+      } // endif
+
+      return [start, end];
+   } // endfunction
+
 
    /* 
     *  This is a utility function to find out the currently selected
     *  text is no matter what the browser is.  It returns an array
     *  of the format [start, end].
     */
-   var getSelectRange = function() {
+   var getSelectRange = function(domNode) {
 
-      var node = this,
-          domNode = node[0],
-          selectStart, selectEnd, r1, r2;
+      var selectStart, selectEnd, r1, r2;
 
       /* This is what actually figures out the selection positions. */
       selectStart = domNode.selectionStart;
@@ -76,10 +109,7 @@
     *  matter what the browser is.  It takes as arguments the start
     *  and end positions of the text to select.
     */
-   var setSelectRange = function(start, end) {
-
-      var node = this,
-          domNode = node[0];
+   var setSelectRange = function(domNode, start, end) {
 
       /* Internet explorer is retarded so we have to use a different
          method do highlight the text. */
@@ -97,12 +127,11 @@
       } // endif
 
       domNode.focus();
-      return node;
    }; // endfunction
          
       
    
-   /****** PUBLIC METHODS ******/
+   /****** PUBLIC ******/
 
    var methods = {
  
@@ -110,13 +139,13 @@
        * INIT
        ********/
       init : function(arg1, arg2) { 
-         var node = this,
-             domNode = node[0],
+         var jqNodes = this,
+             domNode = jqNodes.get(0),
              start, end;
    
          /* If we got no arguments, then return the current range. */
          if (!arg1) {
-            return getSelectRange.apply(node);
+            return getSelectRange(domNode);
          } // endif
 
 
@@ -164,7 +193,9 @@
 
 
          /* We made it this far so select the text. */
-         return setSelectRange.apply(node, [start, end]);
+         setSelectRange(domNode, [start, end]);
+
+         return jqNodes;
       }, // endfunction
 
   
@@ -172,21 +203,44 @@
        * START
        ********/
       start : function(arg1) {
-         var node = this;
+         var jqNodes = this,
+             domNode = jqNodes.get(0),
+             range;
 
-         return setSelectRange.apply(node, [0, 0]);
+         /* If we got an argument, find the start of the range. */
+         if (arg1) { 
+            range = findRange(domNode, arg1);
+            setSelectRange(domNode, [range[0], range[0]]);
+   
+         /* Otherwise, position to the start of the field. */
+         } else { 
+            setSelectRange(domNode, [0, 0]);
+         } // endif
+
+         return jqNodes;
       }, // endfunction
 
   
       /********
        * END
        ********/
-      end : function() { 
-         var node = this,
-             domNode = node[0],
-             lastpos = domNode.value.length;
+      end : function(arg1) { 
+         var jqNodes = this,
+             domNode = jqNodes.get(0),
+             lastpos = domNode.value.length,
+             range;
 
-         return setSelectRange.apply(node, [lastpos, lastpos]);
+         /* If we got an argument, find the end of the range. */
+         if (arg1) { 
+            range = findRange(domNode, arg1);
+            setSelectRange(domNode, [range[1], range[1]]);
+   
+         /* Otherwise, position to the end of the field. */
+         } else { 
+            setSelectRange(domNode, [lastpos, lastpos]);
+         } // endif
+
+         return jqNodes.
       }, // endfunction
 
 
@@ -194,10 +248,10 @@
        * TEXT
        ********/
       text : function(replaceText) { 
-         var node = this,
-             domNode = node[0],
+         var jqNodes = this,
+             domNode = jqNodes.get(0),
              val = domNode.value,
-             range = getSelectRange.apply(node);
+             range = getSelectRange(domNode);
 
          /* If we got no arguments, return the highlighted text. */
          if (!replaceText) {
@@ -212,7 +266,8 @@
          domNode.value = val.substr(0, range[0]) + replaceText +
                          val.substr(range[1] + 1);
          domNode.focus();
-         return node;
+
+         return jqNodes;
       }, // endfunction
   
 
@@ -220,45 +275,24 @@
        * FIND
        ********/
       find : function(arg1) { 
-         var node = this,
-             domNode = node[0],
-             start = 0, 
-             end = 0,
-             strObjType = Object.prototype.toString.call(arg1); 
+         var jqNodes = this,
+             domNode = jqNodes.get(0),
+             range;
 
+         /* Find the start/end positions of the range. */
+         range = findRange(domNode, arg1);
 
-         /* STRING */
-         if (typeof(arg1) === "string") {
-            /* Search for the string.  If we find it, figure out the
-               start and end points so we can highlight it. */
-            var strIndex = domNode.value.indexOf(arg1);
-            if (strIndex >= 0) {
-               start = strIndex;
-               end = strIndex + arg1.length;
-            } // endif
-
-
-         /* REGULAR EXPRESSION */
-         } else if (strObjType === "[object RegExp]") {
-            /* Evaluate the regular expression.  Figure out the start
-               and end points so we can highlight it. */
-            var re = arg1.exec(domNode.value);
-            if(re !== null) {
-               start = re.index;
-               end = start + re[0].length;
-            } // endif
-         } // endif
-
-
-         /* If there's no range to select then refocus the field and 
-            we're done. */
-         if (start == end) {
+         /* If there's no range to select then refocus the field,
+            preserving the current caret position and we're done. */
+         if (range[0] == range[1]) {
             domNode.focus();
-            return node;
+
+         /* We do have a range so select the text. */
+         } else {
+            setSelectRange(domNode, range);
          } // endif
 
-         /* We made it this far so select the text. */
-         return setSelectRange.apply(node, [start, end]);
+         return jqNodes;
       } // endfunction
  
    }; // endobject
@@ -268,12 +302,13 @@
    /***** PLUGIN SCAFFOLD *****/
 
    $.fn.caret = function(method) {
+      var jqNodes = this;
 
       /* Figure out which method to call and pass the appropriate
          parameters. */
       if (methods[method]) {
          return methods[method].apply( 
-               this, Array.prototype.slice.call(arguments, 1) 
+               jqNodes, Array.prototype.slice.call(arguments, 1) 
             );
       } // endif 
 
@@ -281,7 +316,7 @@
       if (typeof(method) === 'object' || 
           typeof(method) === 'number' ||
           !method) {
-         return methods.init.apply(this, arguments);
+         return methods.init.apply(jqNodes, arguments);
       } // endif
 
       $.error('Method ' + method + ' does not exist on jQuery.caret');
