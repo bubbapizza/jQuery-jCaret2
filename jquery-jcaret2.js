@@ -52,7 +52,7 @@
       } // endif
 
       return [start, end];
-   } // endfunction
+   }; // endfunction
 
 
    /* 
@@ -61,7 +61,6 @@
     *  of the format [start, end].
     */
    var getSelectRange = function(domNode) {
-
       var selectStart, selectEnd, r1, r2;
 
       /* This is what actually figures out the selection positions. */
@@ -74,12 +73,13 @@
        */
       if (typeof(selectStart) === "number") {
          return [selectStart, selectEnd];
+      } // endif
       
       /* 
        *  Our browser doesn't support selectionStart so maybe we can 
        *  hack around it with the document.selection property.
        */
-      } else if (document.selection) {
+      if (document.selection) {
 
          r1 = document.selection.createRange().duplicate();
          r2 = document.selection.createRange().duplicate();
@@ -193,7 +193,7 @@
 
 
          /* We made it this far so select the text. */
-         setSelectRange(domNode, [start, end]);
+         setSelectRange(domNode, start, end);
 
          return jqNodes;
       }, // endfunction
@@ -209,12 +209,12 @@
 
          /* If we got an argument, find the start of the range. */
          if (arg1) { 
-            range = findRange(domNode, arg1);
-            setSelectRange(domNode, [range[0], range[0]]);
+            range = findRange(domNode.value, arg1);
+            setSelectRange(domNode, range[0], range[0]);
    
          /* Otherwise, position to the start of the field. */
          } else { 
-            setSelectRange(domNode, [0, 0]);
+            setSelectRange(domNode, 0, 0);
          } // endif
 
          return jqNodes;
@@ -232,15 +232,15 @@
 
          /* If we got an argument, find the end of the range. */
          if (arg1) { 
-            range = findRange(domNode, arg1);
-            setSelectRange(domNode, [range[1], range[1]]);
+            range = findRange(domNode.value, arg1);
+            setSelectRange(domNode, range[1], range[1]);
    
          /* Otherwise, position to the end of the field. */
          } else { 
-            setSelectRange(domNode, [lastpos, lastpos]);
+            setSelectRange(domNode, lastpos, lastpos);
          } // endif
 
-         return jqNodes.
+         return jqNodes;
       }, // endfunction
 
 
@@ -280,7 +280,7 @@
              range;
 
          /* Find the start/end positions of the range. */
-         range = findRange(domNode, arg1);
+         range = findRange(domNode.value, arg1);
 
          /* If there's no range to select then refocus the field,
             preserving the current caret position and we're done. */
@@ -289,7 +289,7 @@
 
          /* We do have a range so select the text. */
          } else {
-            setSelectRange(domNode, range);
+            setSelectRange(domNode, range[0], range[1]);
          } // endif
 
          return jqNodes;

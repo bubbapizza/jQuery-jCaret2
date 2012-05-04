@@ -80,6 +80,14 @@
                .click(function () { $("#f5").caret('find', "mundo") }); 
             $("#findquote")
                .click(function () { $("#f5").caret('find', /".*"/) }); 
+            $("#startmundo")
+               .click(function () { $("#f5").caret('start', "mundo") }); 
+            $("#endmundo")
+               .click(function () { $("#f5").caret('end', "mundo") }); 
+            $("#startquote")
+               .click(function () { $("#f5").caret('start', /".*"/) }); 
+            $("#endquote")
+               .click(function () { $("#f5").caret('end', /".*"/) }); 
 
 
             /**** FIELD 6 ****/
@@ -114,11 +122,23 @@
       <input type="button" id="replace" value="Insert/Replace Text"/>
       <br/><br/>
 
-   <input type="text" id="f5" size="30" 
-          value='holy mundo "thats crazy" man'/>
-      <input type="button" id="findmundo" value="Highlight mundo"/>
-      <input type="button" id="findquote" value="Highlight quotation"/>
-      <br/><br/>
+   <table>
+      <tr>
+         <td><input type="text" id="f5" size="30" 
+                value='holy mundo "thats crazy" man'/></td>
+         <td>
+            <input type="button" id="findmundo" value="Highlight mundo"/>
+            <input type="button" id="findquote" value="Highlight quote"/>
+         </td>
+      </tr>
+      <tr><td/><td>
+         <input type="button" id="startmundo" value="Start mundo"/>
+         <input type="button" id="endmundo" value="End mundo"/>
+         <input type="button" id="startquote" value="Start quote"/>
+         <input type="button" id="endquote" value="End quote"/>
+      </td></tr>
+   </table>
+   <br/><br/>
 
    <input type="text" id="f6" size="30" 
           value='here is some text'/>
