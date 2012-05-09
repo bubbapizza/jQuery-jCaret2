@@ -144,7 +144,7 @@
              start, end;
    
          /* If we got no arguments, then return the current range. */
-         if (!arg1) {
+         if (arg1 == undefined) {
             return getSelectRange(domNode);
          } // endif
 
@@ -179,7 +179,7 @@
              *  of the selected text.  If not, there is no selected text
              *  so the end is the same as the start. 
              */
-            if (arg2 && typeof(arg2) === "number") {
+            if (typeof(arg2) === "number") {
                end = arg2;
             } else {
                end = start;
