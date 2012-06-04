@@ -264,7 +264,7 @@
           *  replace the selected text with the given string.
           */
          domNode.value = val.substr(0, range[0]) + replaceText +
-                         val.substr(range[1] + 1);
+                         val.substr(range[1]);
          domNode.focus();
 
          return jqNodes;
